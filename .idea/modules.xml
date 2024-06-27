@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/security.iml" filepath="$PROJECT_DIR$/.idea/security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SpringBackend-Proj.iml" filepath="$PROJECT_DIR$/.idea/SpringBackend-Proj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
     </modules>
   </component>
 </project>

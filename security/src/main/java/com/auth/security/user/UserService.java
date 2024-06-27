@@ -1,5 +1,6 @@
 package com.auth.security.user;
 
+import com.auth.security.exception.PasswordChangeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +28,15 @@ public class UserService {
 
         // check if the current password is correct
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
+            throw new PasswordChangeException("Wrong password");
         }
         // check if the two new passwords are the same
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
+            throw new PasswordChangeException("New Password and Confirmation Password are not the same");
+        }
+        // Check if the new password is the same as the current password
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new PasswordChangeException("New password must be different from the current password");
         }
 
         // update the password
