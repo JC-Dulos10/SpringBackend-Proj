@@ -1,7 +1,9 @@
 package com.auth.security.user;
 
 import com.auth.security.exception.PasswordChangeException;
+import com.auth.security.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    // Method to delete user by ID, restricted to admins deleting users with USER role
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUserById(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        // Check if the user has USER role
+        if (user.getRole() == Role.USER) {
+            userRepository.delete(user);
+
+        } else {
+            throw new UnauthorizedAccessException("Admins can only delete users with USER role.");
+        }
+    }
 
     public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
 
