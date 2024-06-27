@@ -32,4 +32,13 @@ public class UserController {
         userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
+
+    // Endpoint to delete a user by ID
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Integer userId) {
+        userService.deleteUserById(userId);
+        logger.info("Deleted user with ID: {}", userId);
+        return ResponseEntity.noContent().build();
+    }
 }
