@@ -14,6 +14,10 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    private String normalizeProductName(String productName) {
+        return productName.toLowerCase().replace(" ", "");
+    }
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -34,7 +38,11 @@ public class ProductService {
         Product existingProduct = getProductById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found."));
 
+        String normalizedProductName = normalizeProductName(product.getProductName());
         // Update fields
+        if (productRepository.existsByProductName(normalizedProductName)) {
+            throw new ProductAlreadyExistsException("Product with name " + product.getProductName() + " already exists.");
+        }
         existingProduct.setProductName(product.getProductName());
         existingProduct.setProductPrice(product.getProductPrice());
 
