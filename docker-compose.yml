@@ -7,7 +7,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/jwt_security
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=admin
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     depends_on:
       - db
 
