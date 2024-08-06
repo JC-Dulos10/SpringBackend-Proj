@@ -14,15 +14,6 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 
-server:
-  port: 8443
-  ssl:
-    enabled: true
-    key-store: classpath:keystore.jks
-    key-store-password: 1234
-    key-store-type: JKS
-    key-alias: myssl
-
 logging:
   level:
     org:
