@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("https://frontend-spring-proj.vercel.app/")
+                        .allowedOrigins("http://localhost:3000" ,"https://frontend-spring-proj.vercel.app/", "https://frontend-spring-proj-git-main-jcdulos10s-projects.vercel.app/")
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
