@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    driver-class-name: org.postgresql.Driver  # Mysql driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver  # Mysql driver-class-name:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
@@ -11,8 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    database: postgresql #mysql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect #org.hibernate.dialect.MySQLDialect
+    database: mysql #
+    database-platform: org.hibernate.dialect.MySQLDialect #
 
 server:
   port: ${PORT:8080}  # Bind to the dynamic Render port or default to 8080
