@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver  # Mysql driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
@@ -11,17 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
-
-server:
-  port: 8443
-  ssl:
-    enabled: true
-    key-store: classpath:keystore.jks
-    key-store-password: 1234
-    key-store-type: JKS
-    key-alias: myssl
+    database: postgresql #mysql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect #org.hibernate.dialect.MySQLDialect
 
 logging:
   level:
