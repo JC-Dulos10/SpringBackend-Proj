@@ -62,6 +62,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .isAdmin(isAdmin)
                 .build();
 
 
@@ -80,8 +81,13 @@ public class AuthenticationService {
                     .orElseThrow();
 
             var jwtToken = jwtService.generateToken(user);
+
+            // Check if the user is an admin
+            boolean isAdmin = user.getRole() == Role.ADMIN;
+
             return AuthenticationResponse.builder()
                     .token(jwtToken)
+                    .isAdmin(isAdmin)
                     .build();
         }catch (BadCredentialsException ex) {
             throw new AuthenticationException("Incorrect email or password");
