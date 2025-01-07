@@ -1,5 +1,6 @@
 package com.auth.security.product;
 
+import com.auth.security.category.CategoryDTO;
 import com.auth.security.exception.ProductAlreadyExistsException;
 import com.auth.security.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,9 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
-        // Check if product with the same name already exists
+        if (product.getCreatorUserId() == null) {
+            throw new IllegalArgumentException("Creator User ID cannot be null.");
+        }
         if (productRepository.existsByProductName(product.getProductName())) {
             throw new ProductAlreadyExistsException("Product with name " + product.getProductName() + " already exists.");
         }
@@ -38,13 +41,12 @@ public class ProductService {
         Product existingProduct = getProductById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found."));
 
-        String normalizedProductName = normalizeProductName(product.getProductName());
-        // Update fields
-        if (productRepository.existsByProductName(normalizedProductName)) {
+        if (productRepository.existsByProductName(normalizeProductName(product.getProductName()))) {
             throw new ProductAlreadyExistsException("Product with name " + product.getProductName() + " already exists.");
         }
         existingProduct.setProductName(product.getProductName());
         existingProduct.setProductPrice(product.getProductPrice());
+        existingProduct.setCategory(product.getCategory());
 
         return productRepository.save(existingProduct);
     }
@@ -52,4 +54,5 @@ public class ProductService {
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }
+
 }

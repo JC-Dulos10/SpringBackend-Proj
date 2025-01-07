@@ -17,21 +17,25 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductDTO> products = productService.getAllProducts()
+                .stream()
+                .map(ProductDTO::new)
+                .toList();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found."));
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(new ProductDTO(product));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody Product product, @RequestParam Long creatorUserId) {
+        product.setCreatorUserId(creatorUserId); // Set the user ID
         Product createdProduct = productService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
