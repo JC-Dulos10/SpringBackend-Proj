@@ -36,4 +36,12 @@ public class Category {
 
     @Column(nullable = false)
     private Long creatorUserId; // User ID who created the category
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE
+    }
 }

@@ -14,6 +14,7 @@ public class ProductDTO {
     private LocalDateTime createdDate;
     private Long creatorUserId;
     private CategoryDTO category;
+    private String status; // Active or Inactive
 
     public ProductDTO(Product product) {
         this.productId = product.getProductId();
@@ -21,6 +22,7 @@ public class ProductDTO {
         this.productPrice = product.getProductPrice();
         this.createdDate = product.getCreatedDate();
         this.creatorUserId = product.getCreatorUserId();
+        this.status = product.getStatus().name();
 
         // Map category to CategoryDTO
         if (product.getCategory() != null) {

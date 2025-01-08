@@ -27,6 +27,15 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE
+    }
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override
