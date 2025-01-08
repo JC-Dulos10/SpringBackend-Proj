@@ -41,4 +41,23 @@ public class UserController {
         logger.info("Deleted user with ID: {}", userId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getActiveUsers() {
+        return ResponseEntity.ok(userService.getAllActiveUsers());
+    }
+
+    @GetMapping("/inactive")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getInactiveUsers() {
+        return ResponseEntity.ok(userService.getAllInactiveUsers());
+    }
+
+    @PutMapping("/{userId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> updateUserStatus(@PathVariable Integer userId, @RequestParam String status) {
+        userService.updateUserStatus(userId, User.Status.valueOf(status.toUpperCase()));
+        return ResponseEntity.noContent().build();
+    }
 }

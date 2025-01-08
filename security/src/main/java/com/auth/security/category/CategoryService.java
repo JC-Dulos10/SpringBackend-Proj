@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +36,26 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    public List<CategoryDTO> getAllActiveCategories() {
+        return categoryRepository.findByStatus(Category.Status.ACTIVE)
+                .stream()
+                .map(CategoryDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<CategoryDTO> getAllInactiveCategories() {
+        return categoryRepository.findByStatus(Category.Status.INACTIVE)
+                .stream()
+                .map(CategoryDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public void updateCategoryStatus(Long categoryId, Category.Status newStatus) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        category.setStatus(newStatus);
+        categoryRepository.save(category);
     }
 }

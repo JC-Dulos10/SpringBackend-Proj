@@ -8,6 +8,7 @@ import com.auth.security.exception.MissingFieldsException;
 import com.auth.security.user.Role;
 import com.auth.security.user.User;
 import com.auth.security.user.UserRepository;
+import com.auth.security.user.User.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,7 +52,9 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
+                .status(Status.ACTIVE) // Set default status to ACTIVE
                 .build();
+
         repository.save(user);
 
         logger.info("Inside Role: {}", user.getRole());
@@ -65,15 +68,20 @@ public class AuthenticationService {
 
     // Authenticate user
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+
+        // Check if the user is ACTIVE
+        if (user.getStatus() != Status.ACTIVE) {
+            throw new IllegalArgumentException("Account is inactive. Please contact support.");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
         var jwtToken = jwtService.generateToken(user);
 

@@ -33,9 +33,17 @@ public class Product {
     @Column(nullable = false)
     private Long creatorUserId; // User ID who created the products
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE
+    }
 
 
 }

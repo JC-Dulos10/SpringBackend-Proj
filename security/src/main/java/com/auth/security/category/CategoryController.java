@@ -48,4 +48,23 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<CategoryDTO>> getActiveCategories() {
+        return ResponseEntity.ok(categoryService.getAllActiveCategories());
+    }
+
+    @GetMapping("/inactive")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<CategoryDTO>> getInactiveCategories() {
+        return ResponseEntity.ok(categoryService.getAllInactiveCategories());
+    }
+
+    @PutMapping("/{categoryId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> updateCategoryStatus(@PathVariable Long categoryId, @RequestParam String status) {
+        categoryService.updateCategoryStatus(categoryId, Category.Status.valueOf(status.toUpperCase()));
+        return ResponseEntity.noContent().build();
+    }
 }

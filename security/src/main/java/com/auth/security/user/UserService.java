@@ -60,4 +60,19 @@ public class UserService {
         // save the new password
         userRepository.save(user);
     }
+
+    public List<User> getAllActiveUsers() {
+        return userRepository.findByStatus(User.Status.ACTIVE);
+    }
+
+    public List<User> getAllInactiveUsers() {
+        return userRepository.findByStatus(User.Status.INACTIVE);
+    }
+
+    public void updateUserStatus(Integer userId, User.Status newStatus) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setStatus(newStatus);
+        userRepository.save(user);
+    }
 }
